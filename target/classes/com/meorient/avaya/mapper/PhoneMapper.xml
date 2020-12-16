@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meorient.avaya.mapper.PhoneMapper">
+
+    <resultMap id="getPhoneMsg" type="phoneAttri">
+        <result column="phone_num" property="phoneNum"/>
+        <result column="add_zero" property="addZero"/>
+        <result column="create_Time" property="createTime"/>
+    </resultMap>
+    <!--for test-->
+    <select id="getAllMsg" resultMap="getPhoneMsg">
+        select * from phone_attri;
+    </select>
+    <select id="isExist" resultMap="getPhoneMsg">
+        select phone_num from phone_attri where phone_num = #{num};
+    </select>
+
+    <insert id="insertMsg" parameterType="map">
+        insert into phone_attri (phone_num, add_zero, create_time) value (#{phoneNum}, #{addZero}, #{createTime});
+    </insert>
+
+</mapper>

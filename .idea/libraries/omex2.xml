@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="omex">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/artifacts/omex_jar/omex.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
