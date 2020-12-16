@@ -40,33 +40,32 @@ public class CallService {
 				String[] tokens = param.split("=");
 				map.put(tokens[0], tokens[1]);
 			}
-			// 这里需要记录电话号码、请求、响应、请求时间、创建时间
-			// 是否可以把信息写进map temp中
+
 			// 开始时间
 			long l1 = System.currentTimeMillis();
 			String startTime = simpleDateFormat.format(l1);
-
-			// 临时Map
+			// 存各个记录
 			HashMap<String, String> temp = new HashMap<String, String>();
 
 			String num = map.get("num");
-			String origin = new String(num);				// 电话号码备份
 			temp.put("phoneNum", num);
 
+			{
 //			String cache =									// 这块暂不知有什么用
-					CachePropertiy.get(num);
+				CachePropertiy.get(num);
 //			if(cache!=null && cache != "") {
 //				oneX.call(cache);
 //				return;
 //			}
+			}
 		
 			if (num.matches("01[0-9]{10}")) {
-				// 加0的手机号，将0去掉
+				// 有加0的手机号，将0去掉
 				num = num.substring(1);
 			}
 
 			// 判断数据库中是否存在此号码
-			if (!QueryAndInsertPhoneAttri.isExist(origin)) {
+			if (!QueryAndInsertPhoneAttri.isExist(map.get("num"))) {
 				if (num.length() == 11 && num.startsWith("1")) {
 					// api判断手机号归属地
 					Callable<String> api1= new K780Api(num);
@@ -94,26 +93,23 @@ public class CallService {
 				QueryAndInsertPhoneAttri.insertPhone(temp);
 			}
 
-			num = "9" + num;
-
 			// 将数据写入文档中
-			CachePropertiy.set(origin, num, startTime);
+			CachePropertiy.set(map.get("num"), num, startTime);
 
-
+			// 将记录保存下来
 			long l2 = System.currentTimeMillis();
 			String endTime = simpleDateFormat.format(l2);
 			String runTime = String.valueOf(l2 - l1);
 			temp.put("reqTime", startTime);
 			temp.put("runTime", runTime);
 			temp.put("requestLog", String.valueOf(map.entrySet()));
-			// 将记录保存下来
 			InsertPhoneAttriLog.insetPhoneLog(temp);
 
-			System.out.println(num);
 //			oneX.call(num);
 		} catch (Exception e) {
 			log(e.toString());
 			e.printStackTrace();
+
 		} finally {
 			threadPool.shutdown();
 		}
