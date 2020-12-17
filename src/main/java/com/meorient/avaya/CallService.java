@@ -87,8 +87,8 @@ public class CallService {
 						}
 					}
 				}
-				temp.put("addZero", num);
-				temp.put("createTime", simpleDateFormat.format(System.currentTimeMillis()));
+				temp.put("addZero", num);									// 修改后电话
+				temp.put("createTime", simpleDateFormat.format(System.currentTimeMillis())); // 创建信息时间
 				// 执行插入数据
 				QueryAndInsertPhoneAttri.insertPhone(temp);
 			}
@@ -100,9 +100,9 @@ public class CallService {
 			long l2 = System.currentTimeMillis();
 			String endTime = simpleDateFormat.format(l2);
 			String runTime = String.valueOf(l2 - l1);
-			temp.put("reqTime", startTime);
-			temp.put("runTime", runTime);
-			temp.put("requestLog", String.valueOf(map.entrySet()));
+			temp.put("reqTime", startTime);									// 请求时间
+			temp.put("runTime", runTime);									// 运行时长
+			temp.put("requestLog", String.valueOf(map.entrySet()));			// 请求数据
 			InsertPhoneAttriLog.insetPhoneLog(temp);
 
 //			oneX.call(num);
