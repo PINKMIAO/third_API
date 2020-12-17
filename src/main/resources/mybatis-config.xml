@@ -26,7 +26,7 @@
 
     <mappers>
         <mapper class="com.meorient.avaya.mapper.PhoneMapper"/>
-        <mapper class="com.meorient.avaya.mapper.PhoneLogMapper"/>
+        <mapper class="com.meorient.avaya.mapper.PhoneRequestMapper"/>
     </mappers>
 
 

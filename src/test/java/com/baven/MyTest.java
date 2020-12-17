@@ -1,9 +1,9 @@
 package com.baven;
 
-import com.meorient.avaya.mapper.PhoneLogMapper;
+import com.meorient.avaya.mapper.PhoneRequestMapper;
 import com.meorient.avaya.mapper.PhoneMapper;
-import com.meorient.avaya.pojo.PhoneAttri;
-import com.meorient.avaya.pojo.PhoneAttriLog;
+import com.meorient.avaya.pojo.PhoneCache;
+import com.meorient.avaya.pojo.PhoneRequestLog;
 import com.meorient.avaya.utils.MyBatisUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
@@ -16,17 +16,17 @@ import java.util.concurrent.TimeUnit;
 public class MyTest {
 
     @Test
-    public void selectAll() {
+    public void queryAllPhoneMsg() {
         SqlSession sqlSession = MyBatisUtils.getSqlSession();
         PhoneMapper mapper = sqlSession.getMapper(PhoneMapper.class);
-        List<PhoneAttri> allMsg = mapper.getAllMsg();
-        for (PhoneAttri phoneLog : allMsg) {
+        List<PhoneCache> allMsg = mapper.getAllMsg();
+        for (PhoneCache phoneLog : allMsg) {
             System.out.println(phoneLog);
         }
     }
 
     @Test
-    public void test02() {
+    public void printMap() {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("123", "456");
         map.put("124", "666");
@@ -38,7 +38,7 @@ public class MyTest {
     }
 
     @Test
-    public void test03() throws InterruptedException {
+    public void timeFormatTest() throws InterruptedException {
         Date date = new Date();
         System.out.println(date);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -57,12 +57,12 @@ public class MyTest {
     }
 
     @Test
-    public void insert() {
+    public void insertOneToCache() {
         SqlSession sqlSession = MyBatisUtils.getSqlSession();
         PhoneMapper mapper = sqlSession.getMapper(PhoneMapper.class);
         Map<String,String> map = new HashMap<String, String>();
-        map.put("phoneNum", "113212");
-        map.put("addZero", "0113212");
+        map.put("originPhone", "113212");
+        map.put("actualPhone", "0113212");
         map.put("createTime", "2020-12-13 20:10:30");
         int i = mapper.insertMsg(map);
         if (i > 0) {
@@ -71,10 +71,10 @@ public class MyTest {
     }
 
     @Test
-    public void queryOne() {
+    public void queryOneFromCache() {
         SqlSession sqlSession = MyBatisUtils.getSqlSession();
         PhoneMapper mapper = sqlSession.getMapper(PhoneMapper.class);
-        PhoneAttri exist = mapper.isExist("113212");
+        PhoneCache exist = mapper.isExist("113212");
         if (exist != null) {
             System.out.println("succeed");
         } else {
@@ -83,29 +83,25 @@ public class MyTest {
     }
 
     @Test
-    public void queryOneLog() {
-        //insert into phone_attri_log (phone_num, add_zero, create_time, req_time, request_log, response_log, run_time) value ('13134439827', '013134439827', '2020-12-16 15:06:45', '2020-12-16 15:06:45', 'num=13134439827','013134439827', '60');
+    public void queryAllFromLog() {
         SqlSession sqlSession = MyBatisUtils.getSqlSession();
-        PhoneLogMapper mapper = sqlSession.getMapper(PhoneLogMapper.class);
-        List<PhoneAttriLog> allMsg = mapper.getAllMsg();
-        for (PhoneAttriLog phoneAttriLog : allMsg) {
-            System.out.println(phoneAttriLog);
+        PhoneRequestMapper mapper = sqlSession.getMapper(PhoneRequestMapper.class);
+        List<PhoneRequestLog> allMsg = mapper.getAllMsg();
+        for (PhoneRequestLog phoneRequestLog : allMsg) {
+            System.out.println(phoneRequestLog);
         }
 
     }
 
     @Test
     public void insertLog() {
-        //insert into phone_attri_log (phone_num, add_zero, create_time, req_time, request_log, response_log, run_time) value ('13134439827', '013134439827', '2020-12-16 15:06:45', '2020-12-16 15:06:45', 'num=13134439827','013134439827', '60');
         SqlSession sqlSession = MyBatisUtils.getSqlSession();
-        PhoneLogMapper mapper = sqlSession.getMapper(PhoneLogMapper.class);
+        PhoneRequestMapper mapper = sqlSession.getMapper(PhoneRequestMapper.class);
         Map<String, String> map = new HashMap<String, String>();
-        map.put("phoneNum", "1132126618");
-        map.put("addZero", "01132126618");
-        map.put("createTime", "2020-12-01 12:12:12");
+        map.put("originPhone", "1132126618");
         map.put("reqTime", "2020-12-01 12:12:13");
-        map.put("requestLog", "num=1132126618");
-        map.put("responseLog", "01132126618");
+        map.put("requestData", "num=1132126618");
+        map.put("responseData", "01132126618");
         map.put("runTime", "50");
         int i = mapper.insertPhoneMsgLog(map);
         if (i > 0) {
@@ -117,7 +113,7 @@ public class MyTest {
     }
 
     @Test
-    public void testMapEntry() {
+    public void testMapEntryType() {
         Map<String, String> map = new HashMap<String, String>();
         map.put("phoneNum", "1132126618");
         map.put("addZero", "01132126618");
@@ -129,6 +125,11 @@ public class MyTest {
         String str = "String str = requestLog=num=1132126618, addZero=01132126618, createTime=2020-12-01 12:12:12, phoneNum=1132126618, reqTime=2020-12-01 12:12:13, runTime=50, responseLog=01132126618";
 
         System.out.println(String.valueOf(map.entrySet()));
+    }
+
+    @Test
+    public void all() {
+
     }
 
 

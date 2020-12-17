@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.meorient.avaya.callable.Ip138Api;
 import com.meorient.avaya.callable.K780Api;
-import com.meorient.avaya.utils.InsertPhoneAttriLog;
-import com.meorient.avaya.utils.QueryAndInsertPhoneAttri;
+import com.meorient.avaya.utils.InsertPhoneRequestLog;
+import com.meorient.avaya.utils.QueryOrInsertPhoneCache;
 
 public class CallService {
 	public static void main(String[] args) {
@@ -48,7 +48,7 @@ public class CallService {
 			HashMap<String, String> temp = new HashMap<String, String>();
 
 			String num = map.get("num");
-			temp.put("phoneNum", num);
+			temp.put("originPhone", num);
 
 			{
 //			String cache =									// 这块暂不知有什么用
@@ -65,7 +65,7 @@ public class CallService {
 			}
 
 			// 判断数据库中是否存在此号码
-			if (!QueryAndInsertPhoneAttri.isExist(map.get("num"))) {
+			if (!QueryOrInsertPhoneCache.isExist(map.get("num"))) {
 				if (num.length() == 11 && num.startsWith("1")) {
 					// api判断手机号归属地
 					Callable<String> api1= new K780Api(num);
@@ -87,10 +87,10 @@ public class CallService {
 						}
 					}
 				}
-				temp.put("addZero", num);									// 修改后电话
+				temp.put("actualPhone", num);									// 修改后电话
 				temp.put("createTime", simpleDateFormat.format(System.currentTimeMillis())); // 创建信息时间
 				// 执行插入数据
-				QueryAndInsertPhoneAttri.insertPhone(temp);
+				QueryOrInsertPhoneCache.insertPhone(temp);
 			}
 
 			// 将数据写入文档中
@@ -102,8 +102,8 @@ public class CallService {
 			String runTime = String.valueOf(l2 - l1);
 			temp.put("reqTime", startTime);									// 请求时间
 			temp.put("runTime", runTime);									// 运行时长
-			temp.put("requestLog", String.valueOf(map.entrySet()));			// 请求数据
-			InsertPhoneAttriLog.insetPhoneLog(temp);
+			temp.put("requestData", String.valueOf(map.entrySet()));			// 请求数据
+			InsertPhoneRequestLog.insetPhoneLog(temp);
 
 //			oneX.call(num);
 		} catch (Exception e) {

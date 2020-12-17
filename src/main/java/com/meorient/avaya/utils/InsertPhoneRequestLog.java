@@ -1,19 +1,19 @@
 package com.meorient.avaya.utils;
 
-import com.meorient.avaya.mapper.PhoneLogMapper;
+import com.meorient.avaya.mapper.PhoneRequestMapper;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.Map;
 
 /**
- * 插入用户使用的使用的记录
+ * 插入用户的请求记录
  */
-public class InsertPhoneAttriLog {
+public class InsertPhoneRequestLog {
 
     public static int insetPhoneLog(Map<String, String> map) {
         System.out.println("insetPhoneLog => 执行");
         SqlSession sqlSession = MyBatisUtils.getSqlSession();
-        PhoneLogMapper mapper = sqlSession.getMapper(PhoneLogMapper.class);
+        PhoneRequestMapper mapper = sqlSession.getMapper(PhoneRequestMapper.class);
         int i = mapper.insertPhoneMsgLog(map);
         sqlSession.close();
         if (i > 0) {
